@@ -12,19 +12,37 @@ public class LogicManager : MonoBehaviour
 
     //}
 
-    //private int cycle; // Increment every step
+    public int cycle { get; private set; } // Increment every step
 
     //TODO: Implement STRUCT?
-    public HashSet<ChipModule> gates = new HashSet<ChipModule>();
+    private HashSet<LogicNode> gates = new HashSet<LogicNode>();
 
-    public void Add(ChipModule logicGate)
+    private List<LogicNode> activeOdd = new List<LogicNode>();
+    private List<LogicNode> activeEven = new List<LogicNode>();
+    private Queue<LogicNode> waiting = new Queue<LogicNode>();
+
+
+    public void MarkWaiting(LogicNode node) => waiting.Enqueue(node);
+
+    public void MarkActive(LogicNode node)
     {
-        gates.Add(logicGate);
+        // next-Active
+        (cycle % 2 == 0 ? activeOdd : activeEven).Add(node);
     }
 
-    public void Remove(ChipModule logicGate)
+    //public void UnlistWait(LogicNode node)
+    //{
+    //    waiting.
+    //}
+
+    public void Add(LogicNode node)
     {
-        gates.Remove(logicGate);
+        gates.Add(node);
+    }
+
+    public void Remove(LogicNode node)
+    {
+        gates.Remove(node);
     }
 
     void OnEnable()
@@ -48,10 +66,21 @@ public class LogicManager : MonoBehaviour
             yield return new WaitForFixedUpdate(); // Can be set to own cycle
 
             //Step here
-            foreach (var gate in gates)
+            var currentActive = (cycle & 1) == 0 ? activeEven : activeOdd;
+
+            foreach (var node in currentActive)
             {
-                gate.PostStep();
+                node.ForceCalculate(cycle, this);
             }
+
+            currentActive.Clear();
+
+            while (waiting.Count != 0)
+            {
+                var node = waiting.Dequeue();
+                node.ForceCalculate(cycle, this);
+            }
+            cycle++;
         }
     }
 
