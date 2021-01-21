@@ -68,19 +68,17 @@ public abstract class LogicNode
 
     public struct Signal
     {
-        public byte sourceIndex;
         public byte targetIndex;
         public LogicNode target;
 
         public override int GetHashCode() =>
-            ((sourceIndex << 8) | targetIndex) ^ target.GetHashCode();
+            (targetIndex) ^ target.GetHashCode();
 
         public override bool Equals(object obj) =>
             obj is Signal other && this == other;
 
         public static bool operator ==(Signal left, Signal right) =>
-            left.sourceIndex == right.sourceIndex &&
-                left.targetIndex == right.targetIndex &&
+            left.targetIndex == right.targetIndex &&
                 left.target == right.target;
 
         public static bool operator !=(Signal left, Signal right) => 
