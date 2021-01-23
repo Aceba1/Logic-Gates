@@ -7,21 +7,35 @@ using UnityEngine;
 
 public abstract class LogicNode
 {
-    public virtual string Name { get; private set; } = "Unknown Chip";
+    public virtual string Name => "Unknown Chip";
 
-    public virtual byte Inputs { get; private set; } = 0;
-    public virtual byte Outputs { get; private set; } = 0;
+    public virtual byte Inputs { get; set; } = 0;
+    public virtual byte Outputs { get; set; } = 0;
 
-    //TODO: Add overloads for different types
+    /// <summary>
+    /// Implementation-dependent, store inputs as they come in
+    /// </summary>
+    /// <param name="inputIndex">The intended input</param>
+    /// <param name="value"></param>
+    /// <returns>Whether or not all inputs are satisfied / can safely calculate right now</returns>
     protected abstract bool SetInput(int inputIndex, float value);
 
+    /// <summary>
+    /// Using implementation-managed inputs, calls SendSignal(outputIndex, value) for each output
+    /// </summary>
+    /// <param name="manager">The scope of this node</param>
     protected abstract void Calculate(LogicManager manager);
+
+    //public abstract void Deserialize(string JSON);
 
     //TODO: Property array
     public LogicManager manager;
     public int lastCycle;
 
     public Dictionary<int, List<Signal>> OutputSignals = new Dictionary<int, List<Signal>>();
+
+    public bool ContainsWire(int outputIndex) =>
+        OutputSignals.ContainsKey(outputIndex);
 
     public bool ContainsWire(int outputIndex, Signal signal) =>
         OutputSignals.TryGetValue(outputIndex, out List<Signal> list) && list.Contains(signal);
@@ -32,6 +46,9 @@ public abstract class LogicNode
         else
             OutputSignals.Add(outputIndex, new List<Signal>() { signal });
     }
+
+    public bool TryGetWires(int outputIndex, out List<Signal> wires) =>
+        OutputSignals.TryGetValue(outputIndex, out wires);
 
     public List<Signal> RemoveWires(int outputIndex) {
         if (OutputSignals.TryGetValue(outputIndex, out List<Signal> result))
