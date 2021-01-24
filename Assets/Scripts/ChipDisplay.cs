@@ -7,6 +7,9 @@ public class ChipDisplay : MonoBehaviour
 {
     [SerializeField]
     private Vector2Int coords;
+    [SerializeField]
+    [ColorUsage(false, true)]
+    private Color color = Color.HSVToRGB(.16f, .5f, 1f);
 
     private Material material;
 
@@ -18,7 +21,20 @@ public class ChipDisplay : MonoBehaviour
             if (coords != value)
             {
                 coords = value;
-                UpdateCoords();
+                SetCoords(coords);
+            }
+        }
+    }
+
+    public Color IconColor
+    {
+        get => color;
+        set
+        {
+            if (color != value)
+            {
+                color = value;
+                SetColor(color);
             }
         }
     }
@@ -27,9 +43,13 @@ public class ChipDisplay : MonoBehaviour
     void Start()
     {
         material = GetComponent<Renderer>().material;
-        UpdateCoords();
+        SetCoords(coords);
+        SetColor(color);
     }
 
-    void UpdateCoords() =>
+    public void SetCoords(Vector2Int coords) =>
         material.SetVector("_Coords", new Vector4(coords.x, -coords.y));
+
+    public void SetColor(Color color) =>
+        material.color = color;
 }

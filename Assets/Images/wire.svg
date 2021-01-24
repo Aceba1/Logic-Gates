@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:export-ydpi="96"
+   inkscape:export-xdpi="96"
+   inkscape:export-filename="D:\SYNC\Projects\UNITY\Logic Gates\Assets\Images\wire.png"
+   sodipodi:docname="wire.svg"
+   inkscape:version="1.0rc1 (09960d6f05, 2020-04-09)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 33.866666 33.866668"
+   height="128"
+   width="128">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="403"
+     inkscape:window-x="-8"
+     inkscape:window-height="1057"
+     inkscape:window-width="1920"
+     inkscape:pagecheckerboard="true"
+     units="px"
+     showgrid="true"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="41.996922"
+     inkscape:cx="81.621271"
+     inkscape:zoom="3.959798"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base">
+    <inkscape:grid
+       empopacity="0.48235294"
+       empcolor="#3f3fff"
+       opacity="0.2"
+       color="#3f75ff"
+       empspacing="16"
+       id="grid1402"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       y="0"
+       x="0"
+       height="33.866665"
+       width="33.866665"
+       id="rect1404"
+       style="fill:#ffffff;stroke-width:8.19999;fill-opacity:1" />
+    <path
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:connector-curvature="0"
+       id="path1406"
+       d="m 6.35,4.2333333 8.466668,12.6999997 -8.466668,12.7 h 16.933333 l 8.466668,-12.7 -8.466668,-12.6999997 z"
+       style="fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       y="0"
+       x="0"
+       height="4.2333331"
+       width="33.866665"
+       id="rect2098"
+       style="fill:#ffffff;fill-opacity:0.5;stroke:none;stroke-width:8.19999" />
+    <rect
+       style="fill:#ffffff;fill-opacity:0.5;stroke:none;stroke-width:8.19999"
+       id="rect2098-2"
+       width="33.866665"
+       height="4.2333331"
+       x="8.2651775e-07"
+       y="29.633333" />
+  </g>
+</svg>

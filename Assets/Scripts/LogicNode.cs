@@ -12,6 +12,8 @@ public abstract class LogicNode
     public virtual byte Inputs { get; set; } = 0;
     public virtual byte Outputs { get; set; } = 0;
 
+    public byte VisualCue { get; protected set; } = 0;
+
     /// <summary>
     /// Implementation-dependent, store inputs as they come in
     /// </summary>
@@ -59,6 +61,10 @@ public abstract class LogicNode
     //TODO: Add overloads for different types
     public void SendSignal(int outputIndex, float value)
     {
+        if (Mathf.Abs(value) > 0.5f)
+            VisualCue |= 0b_10000000;
+        else
+            VisualCue &= 0b_01111111;
         if (OutputSignals.TryGetValue(outputIndex, out List<Signal> wires))
         {
             foreach (var wire in wires)
@@ -69,10 +75,10 @@ public abstract class LogicNode
     public static void SendSignal(Signal info, float value)
     {
         if (info.target.SetInput(info.targetIndex, value))
-            info.target.ForceCalculate();
+            info.target.TryCalculate();
     }
 
-    public void ForceCalculate()
+    public void TryCalculate()
     {
         if (lastCycle == manager.cycle) 
             return;

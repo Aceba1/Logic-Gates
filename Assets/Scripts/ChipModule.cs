@@ -2,39 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ChipModule : MonoBehaviour
+public class ChipModule : MonoBehaviour
 {
     public LogicManager logicManager;
 
+    public NodeFactory factory;
+
+    public LogicNode core;
+
     [HideInInspector]
-    public List<CircuitNode> inputs = new List<CircuitNode>();
+    public ChipDisplay display;
     [HideInInspector]
-    public List<CircuitNode> outputs = new List<CircuitNode>();
+    public List<WirePin> inputs = new List<WirePin>();
+    [HideInInspector]
+    public List<WirePin> outputs = new List<WirePin>();
 
-    public abstract int InputCount { get; }
+    //public abstract int InputCount { get; }
 
-    public abstract int OutputCount { get; }
+    //public abstract int OutputCount { get; }
 
-    public abstract void SetInput(int index, float value);
+    //public abstract void SetInput(int index, float value);
 
-    public abstract void PreStep();
+    //public abstract void PreStep();
 
-    public abstract void PostStep();
+    //public abstract void PostStep();
 
     private void OnEnable()
     {
-        foreach (var node in GetComponentsInChildren<CircuitNode>(true))
+        if (core == null) core = factory;
+        display = GetComponentInChildren<ChipDisplay>();
+
+        foreach (var node in GetComponentsInChildren<WirePin>(true))
         {
             if (node.IsOutput) outputs.Add(node);
             else inputs.Add(node);
         }
         
-        logicManager.Add(this);
+        logicManager.Add(core);
     }
 
     private void OnDisable()
     {
-        logicManager.Remove(this);
+        logicManager.Remove(core);
 
         inputs.Clear();
         outputs.Clear();
@@ -49,7 +58,10 @@ public abstract class ChipModule : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if ((core.VisualCue & 0b_10000000) != 0)
+            display.SetColor(display.IconColor * 2f);
+        else
+            display.SetColor(display.IconColor);
     }
 
     private void OnMouseEnter()

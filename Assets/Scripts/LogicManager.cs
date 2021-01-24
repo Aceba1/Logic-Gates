@@ -24,11 +24,8 @@ public class LogicManager : MonoBehaviour
 
     public void MarkWaiting(LogicNode node) => waiting.Enqueue(node);
 
-    public void MarkActive(LogicNode node)
-    {
-        // next-Active
-        (cycle % 2 == 0 ? activeOdd : activeEven).Add(node);
-    }
+    public void MarkActive(LogicNode node) =>
+        (cycle % 2 == 0 ? activeEven : activeOdd).Add(node);
 
     //public void UnlistWait(LogicNode node)
     //{
@@ -38,11 +35,13 @@ public class LogicManager : MonoBehaviour
     public void Add(LogicNode node)
     {
         gates.Add(node);
+        node.manager = this;
     }
 
     public void Remove(LogicNode node)
     {
         gates.Remove(node);
+        node.manager = null;
     }
 
     void OnEnable()
@@ -66,29 +65,24 @@ public class LogicManager : MonoBehaviour
             yield return new WaitForFixedUpdate(); // Can be set to own cycle
 
             //Step here
-            var currentActive = (cycle & 1) == 0 ? activeEven : activeOdd;
+            var currentActive = (cycle & 2) == 0 ? activeEven : activeOdd;
+            cycle++;
 
             foreach (var node in currentActive)
-            {
-                node.ForceCalculate(cycle, this);
-            }
+                node.TryCalculate();
 
             currentActive.Clear();
 
             while (waiting.Count != 0)
-            {
-                var node = waiting.Dequeue();
-                node.ForceCalculate(cycle, this);
-            }
-            cycle++;
+                waiting.Dequeue().TryCalculate();
         }
     }
 
     private void FixedUpdate()
     {
-        foreach (var gate in gates)
-        {
-            gate.PreStep();
-        }
+        //foreach (var gate in gates)
+        //{
+        //    gate.PreStep();
+        //}
     }
 }
