@@ -9,7 +9,7 @@ public class PinOut : WirePin
     public List<WirePin> targets = new List<WirePin>();
 
     public override Vector3 GetWorldPos() =>
-        transform.position + transform.rotation * new Vector3(.5f, 0f, .425f);
+        transform.position + transform.rotation * new Vector3(.5f, 0f, .445f);
 
     private void OnMouseEnter()
     {

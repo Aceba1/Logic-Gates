@@ -10,14 +10,16 @@ public class PinIn : WirePin
     public override bool IsOutput => false;
 
     LineRenderer line;
+    MeshRenderer renderer;
     
     void OnEnable()
     {
+        renderer = GetComponent<MeshRenderer>();
         line = GetComponent<LineRenderer>();
     }
 
     public override Vector3 GetWorldPos() => 
-        transform.position + transform.rotation * new Vector3(-.5f, 0f, .425f);
+        transform.position + transform.rotation * new Vector3(-.5f, 0f, .445f);
 
     private void RouteWire()
     {
@@ -48,7 +50,7 @@ public class PinIn : WirePin
     private void Update()
     {
         line.enabled = source || held == this;
-
+        renderer.enabled = !line.enabled;
         UpdateWire();
     }
 
@@ -72,12 +74,12 @@ public class PinIn : WirePin
 
     private void OnMouseDrag()
     {
-        //Debug.Log("Node Drag");
+        //TODO: Better visualize node altering
     }
 
     private void OnMouseUp()
     {
-        if (hover) // Reroute to new PinIn
+        if (held && hover) // Reroute to new PinIn
         {
             source.Connect(hover);
             source.Disconnect(this);
