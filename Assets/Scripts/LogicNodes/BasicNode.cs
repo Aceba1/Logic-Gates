@@ -1,14 +1,14 @@
 ﻿using System;
 
-abstract class BasicNode : LogicNode
+public abstract class BasicNode : LogicNode
 {
     // Sealing prohibits further overriding
     public sealed override byte Inputs { get => inputSize; set => ResizeInputs(value); }
     public sealed override byte Outputs => 1;
 
-    private int validInputs = 0;
+    public int validInputs = 0;
     private byte inputSize;
-    protected float[] inputs;
+    public float[] inputs;
 
     protected BasicNode(byte inputSize = 2)
     {
@@ -25,10 +25,21 @@ abstract class BasicNode : LogicNode
         inputSize = newSize;
     }
 
+    public override void Disconnect(int inputIndex)
+    {
+        base.Disconnect(inputIndex);
+        inputs[inputIndex] = 0f;
+    }
+
+    public override void PreCalculate()
+    {
+        validInputs = 0;
+    }
+
     protected sealed override bool SetInput(int index, float value)
     {
         inputs[index] = value;
 
-        return ++validInputs == inputSize;
+        return ++validInputs == ConnectedInputs;
     }
 }

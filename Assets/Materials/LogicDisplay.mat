@@ -55,7 +55,7 @@ Material:
     m_Floats:
     - _IconSizeRatio: 0.125
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 0.5, a: 0}
+    - _Color: {r: 1, g: 1, b: 0.5019608, a: 1}
     - _Coords: {r: 0, g: 0, b: 0, a: 0}
     - _NoiseDetail: {r: 0, g: 8, b: 0, a: 0}
     - _NoiseScrollSpeed: {r: -0.2, g: 0.08, b: 0, a: 0}

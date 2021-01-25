@@ -10,10 +10,18 @@ public abstract class WirePin : MonoBehaviour
     [SerializeField]
     private ValueType type;
 
+    [ColorUsage(false, true)]
+    public Color color = Color.HSVToRGB(.16f, .5f, 1f);
+
     //public int Index => 
     public string NodeName => nodeName;
     public abstract bool IsOutput { get; }
     public ValueType Type => type;
+    public byte index;
+
+    public ChipModule module;
+    public WireLine line;
+    protected MeshRenderer visual;
 
     protected static WirePin held;
     protected static PinIn hover;
@@ -21,7 +29,11 @@ public abstract class WirePin : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        line = GetComponentInChildren<WireLine>();
+        visual = GetComponent<MeshRenderer>();
+        module = GetComponentInParent<ChipModule>();
+        line.SetColor(color);
+        visual.material.color = color;
     }
 
     // Update is called once per frame
@@ -38,16 +50,5 @@ public abstract class WirePin : MonoBehaviour
         Range, // [-1, 1]
         Value, // [-,+]
         //Vector, // [Vector4]
-    }
-
-    public static void Connect(PinOut source, PinIn target)
-    {
-        if (target.source != null)
-        {
-            if (target.source == source) return;
-            target.source.Disconnect(target);
-        }
-        target.source = source;
-        source.Connect(target);
     }
 }

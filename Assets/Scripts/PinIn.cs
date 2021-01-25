@@ -2,65 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
 public class PinIn : WirePin
 {
     public PinOut source;
 
     public override bool IsOutput => false;
 
-    LineRenderer line;
-    MeshRenderer renderer;
-    
-    void OnEnable()
-    {
-        renderer = GetComponent<MeshRenderer>();
-        line = GetComponent<LineRenderer>();
-    }
+    public LogicNode.Signal GetSignal() =>
+        new LogicNode.Signal(module.core, index);
 
     public override Vector3 GetWorldPos() => 
-        transform.position + transform.rotation * new Vector3(-.5f, 0f, .445f);
+        transform.position + transform.rotation * new Vector3(-.5f, 0f, .45f);
 
-    private void RouteWire()
+    private void RouteLine()
     {
         // Should make the wire look cleaner?
     }
 
-    private void UpdateWire()
+    private void UpdateLine()
     {
-        if (line.enabled)
-        {
-            line.positionCount = 2;
-            line.SetPosition(1, GetWorldPos());
-            //Todo: 
-            line.SetPosition(0, source.GetWorldPos());
-
-            Vector3 cameraUp = Camera.main.transform.up;
-
-            line.startWidth = ViewWidth(cameraUp, transform.up);
-            line.endWidth = ViewWidth(cameraUp, source.transform.up);
-        }
+        line.Route(source.GetWorldPos(), GetWorldPos());
     }
 
-    private static float ViewWidth(Vector3 view, Vector3 target)
+    private void UpdateHeldLine()
     {
-        return Mathf.Lerp(0.1f, 0.2f, Mathf.Abs(Vector3.Dot(view, target)));
+        line.Route(source.GetWorldPos(), 
+            hover ? hover.GetWorldPos() : WireLine.GetWorldMousePos());
     }
 
     private void Update()
     {
-        line.enabled = source || held == this;
-        renderer.enabled = !line.enabled;
-        UpdateWire();
+        bool isHeld = held == this;
+        bool isActive = isHeld || source;
+        line.enabled = isActive;
+        visual.enabled = !isActive;
+
+        if (isHeld) UpdateHeldLine();
+        else if (isActive) UpdateLine();
     }
 
     private void OnMouseEnter()
     {
+        visual.material.color = visual.material.color * 2f;
         hover = this;
     }
 
     private void OnMouseExit()
     {
+        visual.material.color = visual.material.color / 2f;
         hover = null;
     }
 
@@ -75,11 +64,12 @@ public class PinIn : WirePin
     private void OnMouseDrag()
     {
         //TODO: Better visualize node altering
+        
     }
 
     private void OnMouseUp()
     {
-        if (held && hover) // Reroute to new PinIn
+        if (held && hover != null && hover != this) // Reroute to new PinIn
         {
             source.Connect(hover);
             source.Disconnect(this);

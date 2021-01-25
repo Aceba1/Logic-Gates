@@ -13,9 +13,9 @@ public class ChipModule : MonoBehaviour
     [HideInInspector]
     public ChipDisplay display;
     [HideInInspector]
-    public List<WirePin> inputs = new List<WirePin>();
+    public List<PinIn> inputs = new List<PinIn>();
     [HideInInspector]
-    public List<WirePin> outputs = new List<WirePin>();
+    public List<PinOut> outputs = new List<PinOut>();
 
     //public abstract int InputCount { get; }
 
@@ -29,15 +29,24 @@ public class ChipModule : MonoBehaviour
 
     private void OnEnable()
     {
-        if (core == null) core = factory;
+        if (core == null) core = factory.GetNode();
         display = GetComponentInChildren<ChipDisplay>();
 
-        foreach (var node in GetComponentsInChildren<WirePin>(true))
+        GetComponentsInChildren(true, inputs);
+        GetComponentsInChildren(true, outputs);
+        byte i = 0;
+        foreach (var input in inputs)
         {
-            if (node.IsOutput) outputs.Add(node);
-            else inputs.Add(node);
+            input.module = this;
+            input.index = i++;
         }
-        
+        i = 0;
+        foreach (var output in outputs)
+        {
+            output.module = this;
+            output.index = i++;
+        }
+
         logicManager.Add(core);
     }
 
@@ -66,26 +75,32 @@ public class ChipModule : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        Debug.Log("Enter");
+        //Debug.Log("Enter");
     }
 
     private void OnMouseExit()
     {
-        Debug.Log("Exit");
+        //Debug.Log("Exit");
     }
+
+    private Vector3 Round(Vector3 input) =>
+        new Vector3(Mathf.Round(input.x * 2f) * 0.5f, Mathf.Round(input.y * 2f) * 0.5f, Mathf.Round(input.z * 2f) * 0.5f);
+
+    Vector3 startDragPos;
 
     private void OnMouseDown()
     {
-        Debug.Log("Down");
+        startDragPos = Camera.main.transform.position - transform.position;
+        //Debug.Log("Down");
     }
 
     private void OnMouseDrag()
     {
-        Debug.Log("Drag");
+        transform.position = Round(Camera.main.transform.position - startDragPos);
     }
 
     private void OnMouseUp()
     {
-        Debug.Log("Up");
+        //Debug.Log("Up");
     }
 }

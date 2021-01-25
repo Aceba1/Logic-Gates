@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-class NodeNot : LogicNode
+public class NodeNot : LogicNode
 {
     public override byte Inputs => 1;
     public override byte Outputs => 1;
@@ -9,6 +10,11 @@ class NodeNot : LogicNode
 
     protected override void Calculate(LogicManager manager) =>
         SendSignal(0, (1f - Mathf.Abs(input)) * Mathf.Sign(input));
+
+    public override void Disconnect(int inputIndex)
+    {
+        input = 0f;
+    }
 
     protected override bool SetInput(int inputIndex, float value)
     {

@@ -35,7 +35,7 @@ public class DebugCameraMover : MonoBehaviour
         Vector3 delta = (Input.mousePosition - mouseOrigin) / Screen.width * 180f;
 
         viewRotation = new Vector2(
-            Mathf.Clamp(Mathf.Repeat(-delta.y + startRotation.x + 180f, 360f) - 180f, -80f, 80f),
+            Mathf.Clamp(Mathf.Repeat(-delta.y + startRotation.x + 180f, 360f) - 180f, -90f, 90f),
             Mathf.Repeat(delta.x + startRotation.y, 360f));
 
         transform.rotation = Quaternion.Euler(viewRotation);
