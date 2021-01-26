@@ -15,7 +15,7 @@ public class NodeInput : LogicNode
 
     int lastValue = 0;
 
-    protected override void Calculate(LogicManager manager)
+    protected override void Calculate()
     {
         int thisValue = Input.GetKey(key) ? 1 : 0;
         if (thisValue != lastValue)
@@ -26,5 +26,5 @@ public class NodeInput : LogicNode
         MarkActive();
     }
 
-    protected override bool SetInput(int inputIndex, float value) => false;
+    protected override Response SetInput(int inputIndex, float value) => Response.None;
 }

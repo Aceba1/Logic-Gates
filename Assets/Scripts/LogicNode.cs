@@ -7,6 +7,7 @@ using UnityEngine;
 
 public abstract class LogicNode
 {
+
     public virtual string Name => "Unknown Chip";
 
     public virtual byte Inputs { get; set; } = 0;
@@ -22,13 +23,13 @@ public abstract class LogicNode
     /// <param name="inputIndex">The intended input</param>
     /// <param name="value"></param>
     /// <returns>Whether or not all inputs are satisfied / can safely calculate right now</returns>
-    protected abstract bool SetInput(int inputIndex, float value);
+    protected abstract Response SetInput(int inputIndex, float value);
 
     /// <summary>
     /// Using implementation-managed inputs, calls SendSignal(outputIndex, value) for each output
     /// </summary>
     /// <param name="manager">The scope of this node</param>
-    protected abstract void Calculate(LogicManager manager);
+    protected abstract void Calculate();
 
     //public abstract void Deserialize(string JSON);
 
@@ -89,7 +90,7 @@ public abstract class LogicNode
     /// <para>NOTE: Call base method!</para>
     /// </summary>
     /// <param name="inputIndex">The input index in question</param>
-    public virtual void Connect(int inputIndex)
+    public virtual void Connect(int inputIndex) // TODO: Pass connection type?
     {
         ConnectedInputs++;
     }
@@ -122,10 +123,13 @@ public abstract class LogicNode
 
     public static void SendSignal(Signal info, float value)
     {
-        if (info.target.SetInput(info.targetIndex, value))
-            info.target.MarkPriority();
-        else
-            info.target.MarkWaiting();
+        var target = info.target;
+        var response = target.SetInput(info.targetIndex, value);
+
+        if (response == Response.Ready)
+            target.MarkPriority();
+        else if (response == Response.Wait)
+            target.MarkWaiting();
     }
 
     public void MarkWaiting()
@@ -160,7 +164,7 @@ public abstract class LogicNode
         {
             PreCalculate();
             lastCycle = manager.cycle;
-            Calculate(manager);
+            Calculate();
             PostCalculate();
             lastIndex = manager.nodeStep++;
         }
@@ -197,5 +201,12 @@ public abstract class LogicNode
             !(left == right);
 
         //public bool isStable;
+    }
+
+    public enum Response : byte
+    {
+        Ready,
+        Wait,
+        None
     }
 }

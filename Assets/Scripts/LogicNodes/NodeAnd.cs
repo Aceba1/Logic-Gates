@@ -5,6 +5,6 @@ public class NodeAnd : BasicNode
 {
     public override string Name => "AND Gate";
 
-    protected override void Calculate(LogicManager manager) =>
+    protected override void Calculate() =>
         SendSignal(0, Mathf.Min(inputs));
 }

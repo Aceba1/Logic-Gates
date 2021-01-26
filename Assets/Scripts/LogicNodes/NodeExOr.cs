@@ -14,6 +14,6 @@ public class NodeExOr : BasicNode
         return result;
     }
 
-    protected override void Calculate(LogicManager manager) =>
+    protected override void Calculate() =>
         SendSignal(0, GetActiveCount() & 1);
 }

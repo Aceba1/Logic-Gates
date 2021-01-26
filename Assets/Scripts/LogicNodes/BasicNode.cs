@@ -36,10 +36,15 @@ public abstract class BasicNode : LogicNode
         validInputs = 0;
     }
 
-    protected sealed override bool SetInput(int index, float value)
+    protected sealed override Response SetInput(int index, float value)
     {
+        validInputs++;
+
+        if (inputs[index] == value) 
+            return validInputs == ConnectedInputs ? Response.Ready : Response.None;
+        
         inputs[index] = value;
 
-        return ++validInputs == ConnectedInputs;
+        return validInputs == ConnectedInputs ? Response.Ready : Response.Wait;
     }
 }
