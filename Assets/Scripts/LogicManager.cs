@@ -7,7 +7,7 @@ public class LogicManager : MonoBehaviour
 {
     public void Start()
     {
-        Time.fixedDeltaTime = 0.5f;
+        Time.fixedDeltaTime = 0.2f;
     }
 
     //public List<LogicGate> gates;
@@ -18,6 +18,7 @@ public class LogicManager : MonoBehaviour
     //}
 
     public int cycle { get; private set; } // Increment every step
+    public int nodeStep; //TEMPORARY: DEBUG
 
     //TODO: Implement STRUCT?
     private HashSet<LogicNode> gates = new HashSet<LogicNode>();
@@ -26,12 +27,12 @@ public class LogicManager : MonoBehaviour
     private List<LogicNode> activeEven = new List<LogicNode>();
     //private Queue<LogicNode> waiting = new Queue<LogicNode>();
 
-    private Queue<LogicNode> firstWait = new Queue<LogicNode>();
-    private Queue<LogicNode> lastWait = new Queue<LogicNode>();
+    private Stack<LogicNode> firstWait = new Stack<LogicNode>();
+    private Stack<LogicNode> lastWait = new Stack<LogicNode>();
 
 
-    public void MarkPriority(LogicNode node) => firstWait.Enqueue(node);
-    public void MarkWaiting(LogicNode node) => lastWait.Enqueue(node);
+    public void MarkPriority(LogicNode node) => firstWait.Push(node);
+    public void MarkWaiting(LogicNode node) => lastWait.Push(node);
 
     public void MarkActive(LogicNode node) =>
         ((cycle & 1) == 0 ? activeEven : activeOdd).Add(node);
@@ -80,7 +81,10 @@ public class LogicManager : MonoBehaviour
 
             //Step here
             var currentActive = (cycle & 1) == 0 ? activeEven : activeOdd;
+            if (currentActive.Count == 0) continue; // Nothing wants to change
+
             cycle++;
+            nodeStep = 0;
 
             foreach (var node in currentActive)
                 node.TryCalculate();
@@ -90,9 +94,9 @@ public class LogicManager : MonoBehaviour
             while (firstWait.Count + lastWait.Count != 0)
             {
                 if (firstWait.Count != 0)
-                    firstWait.Dequeue().TryCalculate();
+                    firstWait.Pop().TryCalculate();
                 else
-                    lastWait.Dequeue().TryCalculate();
+                    lastWait.Pop().TryCalculate();
             }
         }
     }

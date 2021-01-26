@@ -33,7 +33,10 @@ public abstract class LogicNode
     //public abstract void Deserialize(string JSON);
 
     public LogicManager manager;
-    private int lastCycle;
+    //TODO: Make private (Public for debugging)
+    public int lastCycle;
+    public int lastIndex;
+
     private bool isWaiting;
 
     public Dictionary<int, List<Signal>> OutputSignals = new Dictionary<int, List<Signal>>();
@@ -159,6 +162,7 @@ public abstract class LogicNode
             lastCycle = manager.cycle;
             Calculate(manager);
             PostCalculate();
+            lastIndex = manager.nodeStep++;
         }
         isWaiting = false;
     }
