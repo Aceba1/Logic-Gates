@@ -24,11 +24,12 @@ public class ChipEditor : Editor
             LogicNode node = module.core;
 
             GUILayout.Label("LOGIC-Node");
-            GUILayout.Label($"Inputs: {node.ConnectedInputs} out of {node.Inputs}");
+            GUILayout.Label($"Cycle: {node.lastCycle} Index: {node.lastIndex}");
+            GUILayout.Label($"Inputs: {node.ConnectedInputs} ({node.Inputs})");
             if (node is BasicNode basic)
             {
                 GUILayout.Label("BASIC-Node");
-                GUILayout.Label($"Valid Inputs: {basic.validInputs} out of {node.ConnectedInputs}");
+                GUILayout.Label($"Valid Inputs: {basic.validInputs} ({node.ConnectedInputs})");
             }
         }
 

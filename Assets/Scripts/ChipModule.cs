@@ -103,4 +103,17 @@ public class ChipModule : MonoBehaviour
     {
         //Debug.Log("Up");
     }
+
+    private void OnDrawGizmos()
+    {
+        if (core != null)
+        {
+            Camera camera = Camera.main;
+            Vector3 screenPos = camera.WorldToScreenPoint(transform.position + transform.forward * 0.5f - transform.up * 0.5f);
+            UnityEditor.Handles.BeginGUI();
+            GUI.Label(new Rect(screenPos.x, Screen.height - screenPos.y, 80, 20), $"{core.lastCycle}");
+            GUI.Label(new Rect(screenPos.x, Screen.height - screenPos.y + 20, 80, 20), $"{core.lastIndex}");
+            UnityEditor.Handles.EndGUI();
+        }
+    }
 }
